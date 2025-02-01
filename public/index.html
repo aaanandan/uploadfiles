@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    <h2>Upload Files</h2>
+    <input type="file" id="fileInput" multiple directory webkitdirectory />
+    <button onclick="uploadFiles()">Upload</button>
+    <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
+    <div id="status"></div>
+
+    <script>
+        function uploadFiles() {
+            let files = document.getElementById("fileInput").files;
+            let formData = new FormData();
+            for (let file of files) {
+                formData.append("files", file);
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/upload", true);
+            xhr.upload.onprogress = function(event) {
+                let percent = (event.loaded / event.total) * 100;
+                document.getElementById("progressBar").value = percent;
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    document.getElementById("status").innerText = "Upload Successful: " + response.files.join(", ");
+                } else {
+                    document.getElementById("status").innerText = "Upload Failed";
+                }
+            };
+
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>
