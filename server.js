@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
-const UPLOAD_DIR = path.join(__dirname, "uploads"); // Configurable upload location
+const UPLOAD_DIR = path.join(__dirname, "/images/photos"); // Configurable upload location
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
